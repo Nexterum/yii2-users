@@ -120,5 +120,10 @@ return [
     'USER_PERMISSIONS' => 'User permissions',
     'VIA_SOCIAL_NETWORKS' => 'Via social networks...',
     'YOU_CAN_ENTER_VIA_SOCIAL_NETWORKS' => 'You can enter via social network',
-    'YOU_CAN_RESET_PASSWORD' => 'If you forgot your password you can <a href="{url}">reset it</a>'
+    'YOU_CAN_RESET_PASSWORD' => 'If you forgot your password you can <a href="{url}">reset it</a>',
+    /* Добавлено Sonys */
+    'ERR_FROM_IP' => 'Exceed number of attempts',
+    'ERR_FROM_LOGIN' => 'Exceed number of attempts',
+    'ERR_OTHER' => 'Authorisation error',
+    'ERR_PASSWORD' => 'Invalid username or password'
 ];

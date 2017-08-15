@@ -22,7 +22,8 @@ class Google extends \yii\authclient\clients\Google
     {
         return [
             'male' => User::SEX_MALE,
-            'female' => User::SEX_FEMALE
+            'female' => User::SEX_FEMALE,
+            'undefined' => User::SEX_UNDEFINED
         ];
     }
 
@@ -46,13 +47,12 @@ class Google extends \yii\authclient\clients\Google
     protected function initUserAttributes()
     {
         $attributes = $this->api('people/me', 'GET');
-
         $return_attributes = [
             'User' => [
                 'email' => $attributes['emails'][0]['value'],
                 'username' => $attributes['displayName'],
                 'photo' => str_replace('sz=50', 'sz=200', $attributes['image']['url']),
-                'sex' => $this->normalizeSex()[$attributes['gender']]
+                'sex' => (isSet($attributes['gender']) ? $this->normalizeSex()[$attributes['gender']] : User::SEX_UNDEFINED)
             ],
             'provider_user_id' => $attributes['id'],
             'provider_id' => UserOauthKey::getAvailableClients()['google'],

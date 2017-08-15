@@ -33,6 +33,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     const SEX_MALE = 1;
     const SEX_FEMALE = 2;
+    const SEX_UNDEFINED = 3;
 
     public function getDefaultPhoto()
     {
@@ -52,6 +53,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             self::SEX_MALE => Yii::t('users', 'SEX_MALE'),
             self::SEX_FEMALE => Yii::t('users', 'SEX_FEMALE'),
+            self::SEX_UNDEFINED => Yii::t('users', 'SEX_UNDEFINED'),
         ];
     }
 
@@ -76,7 +78,7 @@ class User extends ActiveRecord implements IdentityInterface
             [['created_at', 'updated_at', 'status', 'sex'], 'integer'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_NEW, self::STATUS_ACTIVE, self::STATUS_BLOCKED]],
-            ['sex', 'in', 'range' => [self::SEX_MALE, self::SEX_FEMALE]]
+            ['sex', 'in', 'range' => [self::SEX_MALE, self::SEX_FEMALE, self::SEX_UNDEFINED]]
         ];
     }
 

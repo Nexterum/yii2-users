@@ -4,6 +4,7 @@ namespace budyaga\users\models\forms;
 use Yii;
 use yii\base\Model;
 use budyaga\users\models\User;
+use budyaga\users\models\UserFailLogin;
 
 /**
  * Login form
@@ -39,9 +40,23 @@ class LoginForm extends Model
     public function validatePassword($attribute, $params)
     {
         if (!$this->hasErrors()) {
-            $user = $this->getUser();
-            if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
+            /* Ограничение попыток входа */
+            $fail = new UserFailLogin;
+            $check = $fail->CheckFails(Yii::$app->request->userIP, $this->email);
+            if ($check[0] != UserFailLogin::ERR_NONE) {
+                if($check[0] == UserFailLogin::ERR_FROM_IP) {
+                    $this->addError($attribute, Yii::t('users', 'ERR_FROM_IP'));
+                } else if($check[0] == UserFailLogin::ERR_FROM_LOGIN){
+                    $this->addError($attribute, Yii::t('users', 'ERR_FROM_LOGIN'));
+                } else {
+                    $this->addError($attribute, Yii::t('users', 'ERR_OTHER'));
+                }
+            } else {
+                $user = $this->getUser();
+                if (!$user || !$user->validatePassword($this->password)) {
+                    $fail->addFail(Yii::$app->request->userIP, $this->email);
+                    $this->addError($attribute, Yii::t('users', 'ERR_PASSWORD'));
+                }
             }
         }
     }
